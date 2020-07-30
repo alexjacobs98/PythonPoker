@@ -39,7 +39,7 @@ class Player(object):
         self.Hand = []
         self.Name = Name
         self.CardCombinations = []
-        Self.BestHandStrength = 0
+        self.BestHandStrength = 0
 
 
 
@@ -99,6 +99,13 @@ def PrintCards(Source,ListOfCards):
     for Card in ListOfCards:
         print(Card.Value,"of", Card.Suit)
 
+#Returns a duplicate of TableCards
+def GetTableCardDuplicate(TableCards):
+    CurrentCombination = []
+    for Card in TableCards:
+        CurrentCombination.append(Card)
+    return CurrentCombination
+
 
 #Each player will have a number of possible hands made up two held cards and 5 table cards. This function records all 5 card combinations as a result of moving both cards individually acrosss the list of table cards.
 def GetSingleCardChangeCombinations(TableCards, Players):
@@ -116,9 +123,35 @@ def GetSingleCardChangeCombinations(TableCards, Players):
     GetDoubleCardChangeCombinations(TableCards, Players)
 
 
+
 #Records all possible combinations as a result of adding both player cards into the 5 table cards. The maximum size of a single hand to be evaluated is 5.
 def GetDoubleCardChangeCombinations(TableCards, Players):
     for Player in Players:
+        for Card in Player.Hand:
+            FixedCard = Player.Hand[0]
+            MovingCard = Player.Hand[1]
+            PrintCards("player hand",Player.Hand)
+            FixedIndex = 0
+            while FixedIndex < 5:
+                MovingIndex = 0
+                while MovingIndex < 5:
+                    if MovingIndex == FixedIndex:
+                        pass
+                    else:
+                        CurrentCombination = GetTableCardDuplicate(TableCards)
+                        CurrentCombination.pop(FixedIndex)
+                        CurrentCombination.insert(FixedIndex,FixedCard)
+                        CurrentCombination.pop(MovingIndex)
+                        CurrentCombination.insert(MovingIndex,MovingCard)
+                        Player.CardCombinations.append(CurrentCombination)
+                        PrintCards("Current combo", CurrentCombination)
+                    MovingIndex += 1
+                FixedIndex +=1
+            FixedCard = Player.Hand[1]
+            MovingCard = Player.Hand[0]
+
+
+
 
 
 
